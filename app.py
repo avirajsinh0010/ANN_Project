@@ -9,7 +9,7 @@ import time
 import plotly.express as px
 import plotly.graph_objects as go
 
-# Page configuration
+
 st.set_page_config(
     page_title="Customer Spending Predictor",
     page_icon="💰",
@@ -17,7 +17,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
+
 st.markdown("""
     <style>
     .main-header {
@@ -66,7 +66,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Helper function for progress animation
+
 def progress_animation():
     progress_bar = st.progress(0)
     for i in range(100):
@@ -75,10 +75,9 @@ def progress_animation():
     st.success("Analysis complete!")
     return
 
-# App header
+
 st.markdown("<h1 class='main-header'>✨ Customer Spending Predictor ✨</h1>", unsafe_allow_html=True)
 
-# Create sidebar with logo and info
 with st.sidebar:
     st.image("https://cdn.pixabay.com/photo/2017/07/01/14/04/dollar-2461576_1280.png", width=150)
     st.markdown("<h3>About this App</h3>", unsafe_allow_html=True)
@@ -99,7 +98,7 @@ with st.sidebar:
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #9e9e9e;'>Developed with ❤️ by Avi:)</p>", unsafe_allow_html=True)
 
-# Create two columns for the main content
+
 left_col, right_col = st.columns([1, 1])
 
 # Load model and scaler
@@ -109,7 +108,7 @@ try:
     with open('scaler.pkl', 'rb') as file:
         scaler = pickle.load(file)
     
-    # Input form in the left column
+    
     with left_col:
         st.markdown("<h2 class='sub-header'>Customer Information</h2>", unsafe_allow_html=True)
         
@@ -125,22 +124,22 @@ try:
         st.markdown("<div class='slider-label'>Spending Score (1-100)</div>", unsafe_allow_html=True)
         spending_score = st.slider('', 1, 100, 50, key='spending')
         
-        # Convert gender
+        
         gender_numeric = 1 if gender == 'Male' else 0
         
-        # Prepare input
+       
         input_data = np.array([[gender_numeric, age, income, spending_score]])
         
-        # Predict button
+        
         predict_button = st.button('Predict', key='predict_button', 
                                   help='Click to analyze customer data')
     
-    # Results in the right column
+    
     with right_col:
         st.markdown("<h2 class='sub-header'>Analysis Results</h2>", unsafe_allow_html=True)
         
         if predict_button:
-            # Show animation while "processing"
+            
             progress_animation()
             
             try:
@@ -151,7 +150,7 @@ try:
                 prediction_proba = model.predict(input_scaled)[0][0]
                 prediction = 1 if prediction_proba > 0.5 else 0
                 
-                # Display gauge chart for probability
+                
                 fig = go.Figure(go.Indicator(
                     mode="gauge+number",
                     value=float(prediction_proba * 100),
@@ -181,7 +180,7 @@ try:
                 )
                 st.plotly_chart(fig, use_container_width=True)
                 
-                # Output prediction result
+                
                 if prediction == 1:
                     st.markdown("""
                     <div class='prediction-box high-spender'>
@@ -197,18 +196,18 @@ try:
                     </div>
                     """, unsafe_allow_html=True)
                 
-                # Create feature importance chart
+                
                 st.markdown("<h3 class='sub-header'>Customer Profile</h3>", unsafe_allow_html=True)
                 
-                # Create radar chart for customer profile
+                
                 categories = ['Gender', 'Age', 'Income', 'Spending Score']
                 
-                # Normalize values for radar chart
+                
                 normalized_values = [
-                    gender_numeric * 100,  # Convert 0/1 to 0/100
-                    (age - 18) / (70 - 18) * 100,  # Normalize age to 0-100
-                    (income - 10) / (150 - 10) * 100,  # Normalize income to 0-100
-                    spending_score  # Already 0-100
+                    gender_numeric * 100,  
+                    (age - 18) / (70 - 18) * 100,  
+                    (income - 10) / (150 - 10) * 100, 
+                    spending_score  
                 ]
                 
                 fig = go.Figure()
@@ -239,7 +238,7 @@ try:
                 st.write("Input data shape:", input_data.shape)
                 st.write("Input data:", input_data)
         else:
-            # Placeholder for results
+            
             st.markdown("""
             <div style='background-color: #f5f5f5; padding: 2rem; border-radius: 10px; text-align: center;'>
                 <img src="https://cdn.pixabay.com/photo/2024/02/26/14/13/shopping-8598070_1280.jpg" width="300">
@@ -249,7 +248,7 @@ try:
             </div>
             """, unsafe_allow_html=True)
 
-    # Additional information section
+ 
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("<h2 class='sub-header'>Understanding the Results</h2>", unsafe_allow_html=True)
     
