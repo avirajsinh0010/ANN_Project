@@ -6,7 +6,6 @@ from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import time
-import plotly.express as px
 import plotly.graph_objects as go
 
 
